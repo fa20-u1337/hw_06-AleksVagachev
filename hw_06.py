@@ -65,3 +65,27 @@ class VendingMachine:
     'Получите лимонад.'
     """
     "*** ТВОЙ КОД ЗДЕСЬ ***"
+    def __init__(self, prod, val):
+        self.prod = prod
+        self.val = val
+        self.quan = None
+        self.price = None
+
+    def restock(self, quan):
+        if self.quan is None:
+            self.quan = quan
+        else:
+            self.quan += quan
+        return 'Количество товара «{}»: {}'.format(self.prod, self.quan)
+
+    def deposit(self, price):
+        if self.price is None:
+            self.price = price
+        else:
+            self.price += price
+        return 'Доступно: {}} ₽'.format(self.price)
+
+    def vend(self):
+        if self.quan is None:
+            return 'Товара нет в наличии.'
+        pass
