@@ -65,11 +65,11 @@ class VendingMachine:
     'Получите лимонад.'
     """
     "*** ТВОЙ КОД ЗДЕСЬ ***"
-    def __init__(self, prod, val):
+    def __init__(self, prod, price):
         self.prod = prod
-        self.val = val
+        self.price = price
         self.quan = None
-        self.price = None
+        self.balance = None
 
     def restock(self, quan):
         if self.quan is None:
@@ -78,14 +78,29 @@ class VendingMachine:
             self.quan += quan
         return 'Количество товара «{}»: {}'.format(self.prod, self.quan)
 
-    def deposit(self, price):
-        if self.price is None:
-            self.price = price
+    def deposit(self, balance):
+        if self.balance is None:
+            self.balance = balance
+        elif self.quan == 0 or self.quan is None:
+            return 'Товара нет в наличии. Вот твои деньги — {} ₽.'.format(balance)
         else:
-            self.price += price
-        return 'Доступно: {}} ₽'.format(self.price)
+            self.balance += balance
+        return 'Доступно: {} ₽'.format(self.balance)
 
     def vend(self):
         if self.quan is None:
             return 'Товара нет в наличии.'
-        pass
+        elif self.balance is None:
+            return 'Нужно дополнительно внести {} ₽.'.format(self.price)
+        elif self.balance > self.price:
+            change = self.balance - self.price
+            self.quan -= 1
+            self.balance = 0
+            return 'Получите {} и сдачу {} ₽.'.format(self.prod, change)
+        elif self.balance == self.price:
+            self.balance = 0
+            self.quan -= 1
+            return 'Получите {}.'.format(self.prod)
+        elif self.balance < self.price:
+            change = self.price - self.balance
+            return 'Нужно дополнительно внести {} ₽.'.format(change)
